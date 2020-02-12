@@ -1,3 +1,12 @@
+
+/*
+ * Joseph Sofia
+ * CS284-C
+ * 2/12/2020
+ * I pledge my honor that I have abided by the Stevens Honor System
+ * 
+ */
+
 import java.util.Arrays;
 
 public class BinaryNumber {
@@ -73,19 +82,15 @@ public class BinaryNumber {
 	 * Return the decimal value (as int) of the binary number
 	 * 
 	 */
-	public int toDecimal() {
+	public int toDecimal() throws Exception {
 
-		int n = length;
 		int ans = 0;
 
 		// for each digit in the binary number
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < length; i++) {
 			// multiply the digit by the value of the position, add to ans
-			ans += this.getDigit(i) * Math.pow(2, n - i);
+			ans += data[i] * Math.pow(2, (length - 1) - i);
 		}
-
-		//
-		ans /= 2;
 
 		return ans;
 	}
@@ -104,7 +109,7 @@ public class BinaryNumber {
 		// if the amount of shift > length of bin and direction = right, return
 		// 0?
 
-		if(direction != 0 && direction != 1)
+		if (direction != 0 && direction != 1)
 			throw new Exception("bitShift: direction must be -1 for right or 1 for left");
 		if (direction * amount > length)
 			throw new Exception("bitShift: The amount to shift is larger than the data.length");
@@ -123,8 +128,9 @@ public class BinaryNumber {
 	 * 
 	 * @param bn2
 	 *            binary number to operate on
+	 * @throws Exception
 	 */
-	public static int[] bwor(BinaryNumber bn1, BinaryNumber bn2) {
+	public static int[] bwor(BinaryNumber bn1, BinaryNumber bn2) throws Exception {
 
 		// get their inner data so we can change their length without
 		// changing the actual BinaryNumbers
@@ -166,8 +172,9 @@ public class BinaryNumber {
 	 * 
 	 * @param bn2
 	 *            binary number to operate on
+	 * @throws Exception
 	 */
-	public static int[] bwand(BinaryNumber bn1, BinaryNumber bn2) {
+	public static int[] bwand(BinaryNumber bn1, BinaryNumber bn2) throws Exception {
 
 		// get their inner data so we can operate on their length without
 		// changing the actual BinaryNumbers
@@ -220,9 +227,10 @@ public class BinaryNumber {
 	 * 
 	 * @param aBinaryNumber
 	 *            Binary number to add
+	 * @throws Exception
 	 * 
 	 */
-	public void add(BinaryNumber aBinaryNumber) {
+	public void add(BinaryNumber aBinaryNumber) throws Exception {
 
 		int[] bn_data = reduce(aBinaryNumber.getInnerdata());
 
@@ -281,10 +289,11 @@ public class BinaryNumber {
 	 *            Amount of 0s to prepend
 	 * 
 	 */
-	private static int[] prepend(int[] array, int amount) throws Exception{
+	private static int[] prepend(int[] array, int amount) throws Exception {
 
-		if(amount < 0) throw new Exception("prepend: can't prepend negative amount");
-		
+		if (amount < 0)
+			throw new Exception("prepend: can't prepend negative amount");
+
 		int[] ans = new int[array.length + amount];
 
 		for (int i = 0; i < array.length; i++) {
@@ -333,12 +342,12 @@ public class BinaryNumber {
 	}
 
 	public static void main(String[] args) throws Exception {
-		BinaryNumber myBin = new BinaryNumber("101011010");
+		BinaryNumber myBin = new BinaryNumber("10111");
 		// BinaryNumber myBin2 = new BinaryNumber("1111110101010110");
 		System.out.println(myBin);
 		// System.out.println(myBin2);
-		myBin.bitShift(2, 1);
-		System.out.println(myBin);
+
+		System.out.println(myBin.toDecimal());
 
 	}
 }
