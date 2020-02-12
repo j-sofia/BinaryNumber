@@ -23,7 +23,7 @@ public class BinaryNumber {
 	 * @param str
 	 *            Value of the binary number as string, ie "11101"
 	 */
-	public BinaryNumber(String str) {
+	public BinaryNumber(String str) throws Exception {
 
 		data = new int[str.length()];
 
@@ -33,9 +33,7 @@ public class BinaryNumber {
 		for (int i = 0; i < str.length(); i++) {
 			int num = Character.getNumericValue(str.charAt(i));
 			if (num != 1 && num != 0) {
-				System.out.println("Binary input invalid. only enter 0s and 1s");
-				data = null;
-				return;
+				throw new Exception("non-binary input");
 			} else {
 				data[i] = num;
 				length += 1;
@@ -65,7 +63,9 @@ public class BinaryNumber {
 	 * @param index
 	 *            Index of the digit
 	 */
-	public int getDigit(int index) {
+	public int getDigit(int index) throws IndexOutOfBoundsException {
+		if (index < 0 || index > length)
+			throw new IndexOutOfBoundsException("Index is: " + index + ", but length is: " + length);
 		return data[index];
 	}
 
@@ -99,10 +99,15 @@ public class BinaryNumber {
 	 * @param amount
 	 *            Amount of bits to shift
 	 */
-	public void bitShift(int direction, int amount) {
+	public void bitShift(int direction, int amount) throws Exception {
 
 		// if the amount of shift > length of bin and direction = right, return
 		// 0?
+
+		if(direction != 0 && direction != 1)
+			throw new Exception("bitShift: direction must be -1 for right or 1 for left");
+		if (direction * amount > length)
+			throw new Exception("bitShift: The amount to shift is larger than the data.length");
 
 		data = Arrays.copyOf(data, length + -direction * amount);
 
@@ -235,31 +240,34 @@ public class BinaryNumber {
 		int carry = 0;
 
 		for (int i = length - 1; i >= 0; i--) {
-			
-			if (data[i] + bn_data[i] + carry == 3) {
+
+			switch (data[i] + bn_data[i] + carry) {
+			case 3:
 				data[i] = 1;
-				if (i == 0) {
+				if (i == 0) { // carry at the end. allocate more space and set
+								// value
 					this.prepend(1);
 					data[0] = 1;
 				}
 				carry = 1;
-			} else if (data[i] + bn_data[i] + carry == 2) {
+				break;
+			case 2:
 				data[i] = 0;
-				if (i == 0) {
+				if (i == 0) { // carry at the end
 					this.prepend(1);
 					data[0] = 1;
 				}
 				carry = 1;
-			} else if (data[i] + bn_data[i] + carry == 1) {
-
+				break;
+			case 1:
 				data[i] = 1;
-
 				carry = 0;
-			} else if (data[i] + bn_data[i] + carry == 0) {
+				break;
+			case 0:
 				data[i] = 0;
 				carry = 0;
 			}
-			
+
 		}
 
 	}
@@ -273,8 +281,10 @@ public class BinaryNumber {
 	 *            Amount of 0s to prepend
 	 * 
 	 */
-	private static int[] prepend(int[] array, int amount) {
+	private static int[] prepend(int[] array, int amount) throws Exception{
 
+		if(amount < 0) throw new Exception("prepend: can't prepend negative amount");
+		
 		int[] ans = new int[array.length + amount];
 
 		for (int i = 0; i < array.length; i++) {
@@ -307,7 +317,6 @@ public class BinaryNumber {
 		}
 	}
 
-	
 	/**
 	 * Recursively gets rid of leading 0s in an array
 	 * 
@@ -323,12 +332,12 @@ public class BinaryNumber {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		BinaryNumber myBin = new BinaryNumber("101011010");
-		BinaryNumber myBin2 = new BinaryNumber("1111110101010110");
+		// BinaryNumber myBin2 = new BinaryNumber("1111110101010110");
 		System.out.println(myBin);
-		System.out.println(myBin2);
-		myBin.add(myBin2);
+		// System.out.println(myBin2);
+		myBin.bitShift(2, 1);
 		System.out.println(myBin);
 
 	}
