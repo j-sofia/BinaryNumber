@@ -104,11 +104,6 @@ public class BinaryNumber {
 		// if the amount of shift > length of bin and direction = right, return
 		// 0?
 
-		if (direction != 1 && direction != -1) {
-			System.out.println("bitShift direction is invalid. must be -1 or 1");
-			return;
-		}
-
 		data = Arrays.copyOf(data, length + -direction * amount);
 
 		length += -direction * amount;
@@ -350,7 +345,7 @@ public class BinaryNumber {
 		System.out.println(myBin);
 		System.out.println(myBin2);
 		myBin.add(myBin2);
-		System.out.println(myBin.toDecimal());
+		System.out.println(myBin);
 
 	}
 }
