@@ -232,50 +232,34 @@ public class BinaryNumber {
 
 		}
 
-		boolean carry = false;
+		int carry = 0;
 
 		for (int i = length - 1; i >= 0; i--) {
-			if (carry) {
-
-				if (data[i] == 1 && bn_data[i] == 1) {
-					data[i] = 1;
-					if (i == 0) {
-						this.prepend(1);
-						data[0] = 1;
-					}
-					carry = true;
-				} else if (data[i] == 1 || bn_data[i] == 1) {
-
-					data[i] = 0;
-					if (i == 0) {
-						this.prepend(1);
-						data[0] = 1;
-					}
-
-					carry = true;
-				} else if (data[i] == 0 && bn_data[i] == 0) {
-					data[i] = 1;
-					carry = false;
+			
+			if (data[i] + bn_data[i] + carry == 3) {
+				data[i] = 1;
+				if (i == 0) {
+					this.prepend(1);
+					data[0] = 1;
 				}
-
-			} else if (!carry) {
-
-				if (data[i] == 1 && bn_data[i] == 1) {
-					data[i] = 0;
-					if (i == 0) {
-						this.prepend(1);
-						data[0] = 1;
-					}
-					carry = true;
-				} else if (data[i] == 1 || bn_data[i] == 1) {
-					data[i] = 1;
-					carry = false;
-				} else if (data[i] == 0 && bn_data[i] == 0) {
-					carry = false;
+				carry = 1;
+			} else if (data[i] + bn_data[i] + carry == 2) {
+				data[i] = 0;
+				if (i == 0) {
+					this.prepend(1);
+					data[0] = 1;
 				}
+				carry = 1;
+			} else if (data[i] + bn_data[i] + carry == 1) {
 
+				data[i] = 1;
+
+				carry = 0;
+			} else if (data[i] + bn_data[i] + carry == 0) {
+				data[i] = 0;
+				carry = 0;
 			}
-
+			
 		}
 
 	}
